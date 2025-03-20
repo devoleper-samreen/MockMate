@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import routes from "./routes/index.js"
 import "./config/passport.js"
+import { connectDB } from "./DB/db.js"
 
 dotenv.config();
 const app = express();
@@ -22,5 +23,7 @@ app.get("/", (req, res) => {
 });
 
 const port = process.env.PORT || 5000
+
+connectDB()
 
 app.listen(port, () => console.log(`Server started on http://localhost:${port}`));
