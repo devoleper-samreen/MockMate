@@ -8,7 +8,7 @@ export const googleAuthSuccess = async (req, res) => {
         });
     }
 
-    const { user, token } = req.user;
+    const { token } = req.user;
 
     res.cookie("token", token, {
         httpOnly: true,
@@ -34,7 +34,6 @@ export const logout = (req, res) => {
 
 export const getMe = async (req, res) => {
     try {
-        console.log("req.user:", req.user);
 
         const user = await User.findById(req.user.id);
         if (!user) {

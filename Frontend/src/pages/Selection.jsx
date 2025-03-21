@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUserTie, FaCalendarAlt, FaRocket } from "react-icons/fa";
-import { getMe } from "../apiManager/auth"
 import useUserStore from "../store/user.store"
 import axios from "axios";
+import socket from "../apiManager/socket"
+
 
 const SelectionCard = ({ icon, title, description, onClick }) => (
     <div
@@ -20,6 +21,9 @@ const InterviewSelectionPage = () => {
     const navigate = useNavigate();
     const { user, setUser } = useUserStore()
 
+    const [socketConnected, setSocketConnected] = useState(false);
+
+
     const getUserInfo = async () => {
         try {
             const response = await axios.get("http://localhost:5000/api/v1/auth/get-me", { withCredentials: true });
@@ -33,6 +37,44 @@ const InterviewSelectionPage = () => {
     useEffect(() => {
         getUserInfo()
     }, [])
+
+    useEffect(() => {
+        // Socket connection setup
+        socket.on("connect", () => {
+            console.log("Socket Connected:", socket.id);
+            setSocketConnected(true);
+        });
+
+        socket.on("disconnect", () => {
+            console.log("Socket Disconnected");
+            setSocketConnected(false);
+        });
+
+        // Match Found Event Listener
+        socket.on("match-found", ({ roomId, matchedWith }) => {
+            console.log("Match Found with:", matchedWith);
+            alert(`Matched with ${matchedWith.name}! Redirecting...`);
+            //navigate(`/interview-room/${roomId}`);
+        });
+
+        return () => {
+            socket.off("connect");
+            socket.off("disconnect");
+            socket.off("match-found");
+        };
+    }, []);
+
+    const handleInstantInterview = () => {
+        if (!user) {
+            alert("Please login first to start an interview!");
+            navigate("/login");
+        } else {
+            console.log("Emitting Instant Interview Event:", { userId: user._id });
+            socket.emit("instant-interview", { userId: user._id });
+            alert("Searching for an interview match...");
+        }
+    };
+
 
     return (
         <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-10">
@@ -57,7 +99,7 @@ const InterviewSelectionPage = () => {
                     icon={<FaRocket />}
                     title="Instant Interview"
                     description="Start an interview right now with a peer or AI. Real-time coding + video call."
-                    onClick={() => navigate("/instant-interview")}
+                    onClick={handleInstantInterview}
                 />
             </div>
         </div>
