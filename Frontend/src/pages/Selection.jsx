@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUserTie, FaCalendarAlt, FaRocket } from "react-icons/fa";
+import { getMe } from "../apiManager/auth"
+import useUserStore from "../store/user.store"
+import axios from "axios";
 
 const SelectionCard = ({ icon, title, description, onClick }) => (
     <div
@@ -15,6 +18,21 @@ const SelectionCard = ({ icon, title, description, onClick }) => (
 
 const InterviewSelectionPage = () => {
     const navigate = useNavigate();
+    const { user, setUser } = useUserStore()
+
+    const getUserInfo = async () => {
+        try {
+            const response = await axios.get("http://localhost:5000/api/v1/auth/get-me", { withCredentials: true });
+            console.log(response);
+            setUser(response?.data?.user);
+        } catch (error) {
+            console.error("Error fetching user info:", error);
+        }
+    }
+
+    useEffect(() => {
+        getUserInfo()
+    }, [])
 
     return (
         <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-10">

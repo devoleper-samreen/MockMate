@@ -7,9 +7,11 @@ import "./config/passport.js"
 import { connectDB } from "./DB/db.js"
 import http from "http"
 import { setupInterviewSockets } from "./controllers/interview.controller.js"
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 const app = express();
+app.use(cookieParser());
 
 app.use(cors({
     origin: process.env.FRONTEND_URL,

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { FaVideo, FaCalendarCheck, FaClock, FaUsers } from "react-icons/fa";
-import { authenticate, getMe } from "../apiManager/auth"
+import { authenticate } from "../apiManager/auth"
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/user.store"
 
@@ -27,21 +27,6 @@ const HomePage = () => {
         authenticate()
     };
 
-    const getUserInfo = async () => {
-        try {
-            const response = await getMe();
-            console.log(response);
-            setUser(response?.data?.user);
-        } catch (error) {
-            console.error("Error fetching user info:", error);
-        }
-    }
-
-    useEffect(() => {
-        if (user) {
-            getUserInfo();
-        }
-    }, [user])
 
     return (
         <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center">

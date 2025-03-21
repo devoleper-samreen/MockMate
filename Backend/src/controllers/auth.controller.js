@@ -12,11 +12,11 @@ export const googleAuthSuccess = async (req, res) => {
 
     res.cookie("token", token, {
         httpOnly: true,
-        secure: true
+        secure: false
     });
 
 
-    res.redirect("http://localhost:5173")
+    res.redirect("http://localhost:5173/select-interview")
 
 };
 
@@ -34,7 +34,9 @@ export const logout = (req, res) => {
 
 export const getMe = async (req, res) => {
     try {
-        const user = await User.findById(req.user._id);
+        console.log("req.user:", req.user);
+
+        const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(404).json({
                 message: "User not found"
