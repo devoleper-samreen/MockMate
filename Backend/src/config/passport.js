@@ -2,9 +2,9 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
 passport.use(
     new GoogleStrategy(
@@ -15,12 +15,13 @@ passport.use(
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                let user = await User.findOne({
-                    email: profile.emails[0].value
-                });
+                console.log("Google Auth Strategy triggered!");
+
+                let user = await User.findOne({ googleId: profile.id });
 
                 if (!user) {
                     user = new User({
+                        googleId: profile.id,
                         name: profile.displayName,
                         email: profile.emails[0].value,
                         googleAuth: true,
@@ -44,11 +45,11 @@ passport.use(
 
                 done(null, { user, token });
             } catch (error) {
+                console.error("Error in Google Auth Strategy:", error);
                 done(error, null);
             }
         }
     )
 );
-
 
 export default passport;

@@ -1,8 +1,4 @@
 export const googleAuthSuccess = async (req, res) => {
-    console.log("heelo...");
-
-    console.log("res.user:", req.user);
-
 
     if (!req.user) {
         return res.status(401).json({
@@ -11,12 +7,7 @@ export const googleAuthSuccess = async (req, res) => {
         });
     }
 
-    console.log("hii...");
-
-
     const { user, token } = req.user;
-
-
 
     res.cookie("token", token, {
         httpOnly: true,
