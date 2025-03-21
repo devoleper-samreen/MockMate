@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema(
             enum: ["candidate", "interviewer"],
             required: true,
         },
+        socketId: {
+            type: String,
+            default: null
+        },
         profile: {
             experience: {
                 type: String, // Ex: "2 years", "Fresher"

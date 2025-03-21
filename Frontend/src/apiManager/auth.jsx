@@ -10,3 +10,7 @@ export const logout = async () => {
     return await AxiosInstance.get('/auth/logout')
 
 }
+
+export const getMe = async () => {
+    return await AxiosInstance.get("/auth/get-me")
+}

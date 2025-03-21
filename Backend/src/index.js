@@ -5,6 +5,8 @@ import cors from "cors";
 import routes from "./routes/index.js"
 import "./config/passport.js"
 import { connectDB } from "./DB/db.js"
+import http from "http"
+import { setupInterviewSockets } from "./controllers/interview.controller.js"
 
 dotenv.config();
 const app = express();
@@ -26,4 +28,8 @@ const port = process.env.PORT || 5000
 
 connectDB()
 
-app.listen(port, () => console.log(`Server started on http://localhost:${port}`));
+const server = http.createServer(app);
+
+setupInterviewSockets(server);
+
+server.listen(port, () => console.log(`Server started on http://localhost:${port}`));

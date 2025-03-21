@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaVideo, FaCalendarCheck, FaClock, FaUsers } from "react-icons/fa";
-import { authenticate } from "../apiManager/auth"
+import { authenticate, getMe } from "../apiManager/auth"
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../store/user.store"
 
 const FeatureCard = ({ icon, title, description }) => (
     <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
@@ -20,10 +21,27 @@ const ReviewCard = ({ name, review }) => (
 
 const HomePage = () => {
     const navigate = useNavigate()
+    const { user, setUser } = useAuthStore()
 
     const handleLogin = async () => {
         authenticate()
     };
+
+    const getUserInfo = async () => {
+        try {
+            const response = await getMe();
+            console.log(response);
+            setUser(response?.data?.user);
+        } catch (error) {
+            console.error("Error fetching user info:", error);
+        }
+    }
+
+    useEffect(() => {
+        if (user) {
+            getUserInfo();
+        }
+    }, [user])
 
     return (
         <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center">

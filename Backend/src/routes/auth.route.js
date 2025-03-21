@@ -1,6 +1,6 @@
 import express from "express";
 import passport from "passport";
-import { googleAuthSuccess, logout } from "../controllers/auth.controller.js"
+import { googleAuthSuccess, logout, getMe } from "../controllers/auth.controller.js"
 import { authenticateUser } from "../middleware/auth.middleware.js"
 
 const router = express.Router();
@@ -16,6 +16,7 @@ router.get("/google", passport.authenticate("google", {
 router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login", session: false }), googleAuthSuccess);
 
 router.get("/logout", authenticateUser, logout);
+router.get("/get-me", authenticateUser, getMe);
 
 
 export default router;
