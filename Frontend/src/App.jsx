@@ -1,8 +1,10 @@
 import React from "react";
+import { authenticate } from "./apiManager/auth"
 
 const App = () => {
-  const handleLogin = () => {
-
+  const handleLogin = async () => {
+    const response = await authenticate()
+    console.log('response : ', response);
   };
 
   return (
