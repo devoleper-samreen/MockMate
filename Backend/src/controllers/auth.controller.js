@@ -42,7 +42,7 @@ export const getMe = async (req, res) => {
             });
         }
         return res.status(200).json({
-            message: "user get successfully!",
+            message: "user found successfully!",
             user
         });
 

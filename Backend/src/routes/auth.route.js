@@ -13,7 +13,7 @@ router.get("/google", passport.authenticate("google", {
 
 
 // Google Auth Callback Route
-router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login", session: false }), googleAuthSuccess);
+router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/", session: false }), googleAuthSuccess);
 
 router.get("/logout", authenticateUser, logout);
 router.get("/get-me", authenticateUser, getMe);

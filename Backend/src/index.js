@@ -6,7 +6,7 @@ import routes from "./routes/index.js"
 import "./config/passport.js"
 import { connectDB } from "./DB/db.js"
 import http from "http"
-import { setupInterviewSockets } from "./controllers/interview.controller.js"
+//import { setupInterviewSockets } from "./controllers/interview.controller.js"
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -32,6 +32,6 @@ connectDB()
 
 const server = http.createServer(app);
 
-setupInterviewSockets(server);
+//setupInterviewSockets(server);
 
 server.listen(port, () => console.log(`Server started on http://localhost:${port}`));

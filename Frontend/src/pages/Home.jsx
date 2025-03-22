@@ -1,23 +1,9 @@
 import React, { useEffect } from "react";
 import { FaVideo, FaCalendarCheck, FaClock, FaUsers } from "react-icons/fa";
-import { authenticate } from "../apiManager/auth"
+import { authenticate, getMe } from "../apiManager/auth"
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/user.store"
 
-const FeatureCard = ({ icon, title, description }) => (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
-        <div className="mb-4">{icon}</div>
-        <h3 className="text-xl font-bold mb-2">{title}</h3>
-        <p className="text-gray-300">{description}</p>
-    </div>
-);
-
-const ReviewCard = ({ name, review }) => (
-    <div className="bg-gray-700 p-6 rounded-lg max-w-xs shadow-lg">
-        <p className="text-gray-300 mb-4">"{review}"</p>
-        <h4 className="text-lg font-bold text-yellow-400">- {name}</h4>
-    </div>
-);
 
 const HomePage = () => {
     const navigate = useNavigate()
@@ -26,6 +12,21 @@ const HomePage = () => {
     const handleLogin = async () => {
         authenticate()
     };
+
+    const getUserInfo = async () => {
+        try {
+            const response = await getMe()
+            console.log(response.user);
+
+            setUser(response?.user);
+        } catch (error) {
+            console.error("Error fetching user info:", error);
+        }
+    };
+
+    useEffect(() => {
+        getUserInfo();
+    }, []);
 
 
     return (
@@ -110,5 +111,20 @@ const HomePage = () => {
         </div>
     );
 };
+
+const FeatureCard = ({ icon, title, description }) => (
+    <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+        <div className="mb-4">{icon}</div>
+        <h3 className="text-xl font-bold mb-2">{title}</h3>
+        <p className="text-gray-300">{description}</p>
+    </div>
+);
+
+const ReviewCard = ({ name, review }) => (
+    <div className="bg-gray-700 p-6 rounded-lg max-w-xs shadow-lg">
+        <p className="text-gray-300 mb-4">"{review}"</p>
+        <h4 className="text-lg font-bold text-yellow-400">- {name}</h4>
+    </div>
+);
 
 export default HomePage;
