@@ -34,10 +34,12 @@ function ProtectedRoute() {
                     borderRadius: "12px",
                     padding: "20px",
                 }}
-                bodyStyle={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
+                styles={{
+                    body: {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                    },
                 }}
             >
                 <ExclamationCircleOutlined

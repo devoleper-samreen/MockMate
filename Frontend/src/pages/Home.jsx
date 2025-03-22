@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaVideo, FaCalendarCheck, FaClock, FaUsers } from "react-icons/fa";
 import { authenticate, getMe } from "../apiManager/auth"
 import { useNavigate } from "react-router-dom";
@@ -32,27 +32,28 @@ const HomePage = () => {
     return (
         <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center">
             {/* Navbar */}
-            <nav className="px-[5%] w-full flex justify-between items-center py-5 bg-gray-800 shadow-lg">
-                <h1 className="text-2xl font-bold text-blue-400">MockMate</h1>
+            <nav className="px-[2%] md:px-[5%] w-full flex justify-between items-center py-5 bg-gray-900 shadow-lg">
+                <h1 className="text-2xl font-bold text-yellow-400">MockMate</h1>
 
                 <button
                     onClick={handleLogin}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded shadow-md transition cursor-pointer"
+                    className="bg-yellow-400 hover:bg-yellow-500 text-gray-700 font-semibold px-6 py-3 rounded shadow-md transition transform cursor-pointer"
                 >
-                    Sign in with Google
+                    <span className="hidden sm:inline">Sign in with Google</span>
+                    <span className="inline sm:hidden">Sign in</span>
                 </button>
             </nav>
 
-            <div className="w-full min-h-screen bg-gray-900 text-white">
+            <div className="w-full md:min-h-screen bg-gray-900 text-white">
                 {/* Hero Section */}
-                <div className="px-[10%] relative flex flex-col items-center justify-center text-center h-[90vh] bg-gradient-to-r from-blue-400 to-purple-800 p-8">
-                    <h1 className="text-5xl font-extrabold mb-6">
+                <div className="px-[4%] lg:px-[10%] relative flex flex-col items-center justify-center text-center md:h-[90vh] h-[70vh] bg-gradient-to-r from-blue-400 to-purple-800 p-8">
+                    <h1 className="text-4xl md:text-5xl font-extrabold mb-6">
                         MockMate - Your Ultimate Interview Practice Platform
                     </h1>
                     <p className="text-lg max-w-2xl">
                         Get real interview experience with live video calling, code editor, timers, and structured practice sessions.
                     </p>
-                    <button className="mt-6 px-6 py-3 text-lg bg-purple-600 hover:bg-purple-800 rounded-lg shadow-lg cursor-pointer" onClick={() => navigate('/select-interview')}>
+                    <button className="mt-16 md:mt-6 px-6 py-3 text-lg bg-purple-600 hover:bg-purple-800 rounded-lg shadow-lg cursor-pointer" onClick={() => navigate('/select-interview')}>
                         Start Your First Interview
                     </button>
                 </div>
@@ -113,7 +114,7 @@ const HomePage = () => {
 };
 
 const FeatureCard = ({ icon, title, description }) => (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center text-center">
+    <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center text-center hover:scale-105 transition-transform">
         <div className="mb-4">{icon}</div>
         <h3 className="text-xl font-bold mb-2">{title}</h3>
         <p className="text-gray-300">{description}</p>
@@ -121,7 +122,7 @@ const FeatureCard = ({ icon, title, description }) => (
 );
 
 const ReviewCard = ({ name, review }) => (
-    <div className="bg-gray-700 p-6 rounded-lg max-w-xs shadow-lg">
+    <div className="bg-gray-700 p-6 rounded-lg max-w-xs shadow-lg hover:scale-105 transition-transform">
         <p className="text-gray-300 mb-4">"{review}"</p>
         <h4 className="text-lg font-bold text-yellow-400">- {name}</h4>
     </div>
