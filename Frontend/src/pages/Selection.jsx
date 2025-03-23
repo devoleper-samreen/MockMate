@@ -51,14 +51,22 @@ const InterviewSelectionPage = () => {
     useEffect(() => {
         let interval;
         if (isMatching) {
+            setTimer(30); // Start from 30
             interval = setInterval(() => {
-                setTimer(prev => prev + 1);
+                setTimer(prev => {
+                    if (prev <= 1) {
+                        clearInterval(interval);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
             }, 1000);
         } else {
             clearInterval(interval);
         }
         return () => clearInterval(interval);
     }, [isMatching]);
+
 
     return (
         <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-10">

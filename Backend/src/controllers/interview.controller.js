@@ -14,7 +14,7 @@ export const makeConnection = async (server) => {
             await User.findByIdAndUpdate(userId, { socketId: socket.id })
             addUserToQueue(userId)
 
-            findMatch(userId, (matchedUser) => {
+            findMatch(userId, io, (matchedUser) => {
                 if (matchedUser) {
                     connectUsers(userId, matchedUser, io)
                     removeUserFromQueue(userId);

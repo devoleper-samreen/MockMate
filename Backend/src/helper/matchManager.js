@@ -14,7 +14,10 @@ export const addUserToQueue = async (userId) => {
     waitingUsers.push(user)
 }
 
-export const findMatch = async (userId, callback) => {
+export const findMatch = async (userId, io, callback) => {
+    const user = await User.findById(userId);
+    // if (!user || !matchedUser) return;
+
     let checkingCount = 0
     let maxChecking = 6
 
@@ -34,14 +37,11 @@ export const findMatch = async (userId, callback) => {
             clearInterval(checkingTimer);
             retryTimers.delete(userId);
 
-            const user = await User.findById(userId);
-            if (!user || !matchedUser) return;
-
             console.log(`✅ Match found! ${userId} and ${matchedUser._id}`);
 
             // Remove both users using their socketId
-            // removeUserFromQueue(user.socketId);
-            // removeUserFromQueue(matchedUser.socketId);
+            removeUserFromQueue(user.socketId);
+            removeUserFromQueue(matchedUser.socketId);
 
             callback(matchedUser)
             return
@@ -51,6 +51,10 @@ export const findMatch = async (userId, callback) => {
             clearInterval(checkingTimer);
             retryTimers.delete(userId);
             console.log("No match found...");
+            removeUserFromQueue(user.socketId);
+
+            // Notify user
+            io.to(user.socketId).emit("no-match-found");
 
             callback(null)
         }
