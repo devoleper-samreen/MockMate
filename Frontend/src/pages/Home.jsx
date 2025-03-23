@@ -53,7 +53,7 @@ const HomePage = () => {
                     <p className="text-lg max-w-2xl">
                         Get real interview experience with live video calling, code editor, timers, and structured practice sessions.
                     </p>
-                    <button className="mt-16 md:mt-6 px-6 py-3 text-lg bg-purple-600 hover:bg-purple-800 rounded-lg shadow-lg cursor-pointer" onClick={() => navigate('/select-interview')}>
+                    <button className="mt-16 md:mt-6 px-6 py-3 text-lg bg-purple-600 hover:bg-purple-800 rounded-lg shadow-lg cursor-pointer font-semibold" onClick={() => navigate('/select-interview')}>
                         Start Your First Interview
                     </button>
                 </div>
