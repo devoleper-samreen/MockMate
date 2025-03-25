@@ -36,11 +36,11 @@ const HomePage = () => {
                 <h1 className="text-2xl font-bold text-yellow-400">MockMate</h1>
 
                 <button
-                    onClick={handleLogin}
+                    onClick={() => navigate("/signup")}
                     className="bg-yellow-400 hover:bg-yellow-500 text-gray-700 font-semibold px-6 py-3 rounded shadow-md transition transform cursor-pointer"
                 >
-                    <span className="hidden sm:inline">Sign in with Google</span>
-                    <span className="inline sm:hidden">Sign in</span>
+                    <span className="hidden sm:inline">Signup</span>
+
                 </button>
             </nav>
 

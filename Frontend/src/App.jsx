@@ -4,6 +4,8 @@ import Home from "./pages/Home"
 import InterviewSelectionPage from "./pages/Selection"
 import ProtectedRoute from "./protected/ProtectedRoute"
 import Room from "./pages/Room"
+import Signup from "./components/Signup"
+import Login from "./components/Login"
 
 const App = () => {
 
@@ -11,6 +13,9 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+
 
         <Route element={<ProtectedRoute />}>
           <Route path="/select-interview" element={<InterviewSelectionPage />} />
