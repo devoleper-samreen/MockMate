@@ -1,11 +1,29 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../apiManager/auth"
+import useAuthStore from "../store/user.store"
+import { authenticate } from "../apiManager/auth"
 
 const Login = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = (data) => console.log(data);
+    const { register, handleSubmit, formState: { errors } } = useForm()
+    const { user, setUser } = useAuthStore()
+    const navigate = useNavigate()
+
+
+    const onSubmit = async (data) => {
+        const response = await login(data)
+        console.log(response);
+        setUser(response?.user)
+        navigate('/')
+
+    }
+
+    const handleLogin = async () => {
+        authenticate()
+    };
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
@@ -22,7 +40,7 @@ const Login = () => {
 
                     <button type="submit" className="w-full bg-blue-600 p-3 rounded-md hover:bg-blue-700 mt-3">Login</button>
                 </form>
-                <button className="w-full flex items-center justify-center mt-3 border p-3 rounded-md bg-gray-700 hover:bg-gray-600">
+                <button className="w-full flex items-center justify-center mt-3 border p-3 rounded-md bg-gray-700 hover:bg-gray-600" onClick={handleLogin}>
                     <FcGoogle className="mr-2" /> Login with Google
                 </button>
                 <p className="text-sm text-center mt-3">Don't have an account? <Link to="/signup" className="text-blue-400">Sign Up</Link></p>

@@ -2,10 +2,23 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
+import { signup } from "../apiManager/auth"
+import { authenticate } from "../apiManager/auth"
 
 const Signup = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = (data) => console.log(data);
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const onSubmit = async (data) => {
+        console.log(data);
+        const response = await signup(data)
+        reset()
+        console.log(response);
+
+    };
+
+    const handleLogin = async () => {
+        authenticate()
+    };
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
@@ -36,7 +49,7 @@ const Signup = () => {
                         type="submit"
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-md transition mt-3">Sign Up</button>
                 </form>
-                <button className="w-full flex items-center justify-center mt-3 border border-gray-700 p-3 rounded-md bg-gray-700 hover:bg-gray-600 transition">
+                <button className="w-full flex items-center justify-center mt-3 border border-gray-700 p-3 rounded-md bg-gray-700 hover:bg-gray-600 transition" onClick={handleLogin}>
                     <FcGoogle className="mr-2" /> Sign up with Google
                 </button>
                 <p className="text-sm text-center mt-3">Already have an account? <Link to="/login" className="text-blue-400">Login</Link></p>

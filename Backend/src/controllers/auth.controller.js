@@ -1,7 +1,9 @@
 import { User } from "../models/user.model.js"
 import { generateAccessAndRefreshToken } from "../helper/authToken.js"
+import bcrypt from "bcryptjs"
 
 export const registerUser = async (req, res) => {
+    console.log("req.body", req.body);
 
     const { name, email, password } = req.body
 
@@ -66,7 +68,7 @@ export const loginUser = async (req, res) => {
     }
 
     return res.status(200).
-        cookie("accessToken", accessToken, options).
+        cookie("token", accessToken, options).
         cookie("refeshToken", refreshToken, options).
         json({
             user: loggedInUser,

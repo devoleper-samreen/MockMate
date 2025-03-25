@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaVideo, FaCalendarCheck, FaClock, FaUsers } from "react-icons/fa";
-import { authenticate, getMe } from "../apiManager/auth"
+import { getMe } from "../apiManager/auth"
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/user.store"
 
@@ -9,16 +9,15 @@ const HomePage = () => {
     const navigate = useNavigate()
     const { user, setUser } = useAuthStore()
 
-    const handleLogin = async () => {
-        authenticate()
-    };
-
     const getUserInfo = async () => {
         try {
-            const response = await getMe()
-            console.log(response.user);
+            if (!user) {
+                const response = await getMe()
+                console.log(response.user);
 
-            setUser(response?.user);
+                setUser(response?.user);
+            }
+
         } catch (error) {
             console.error("Error fetching user info:", error);
         }

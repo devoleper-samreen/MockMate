@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import jwt from "jsonwebtoken"
 
 const userSchema = new mongoose.Schema(
     {
@@ -20,7 +21,7 @@ const userSchema = new mongoose.Schema(
         role: {
             type: String,
             enum: ["candidate", "interviewer"],
-            required: true,
+            default: "candidate"
         },
         socketId: {
             type: String,

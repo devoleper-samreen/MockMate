@@ -12,10 +12,9 @@ export const generateAccessAndRefreshToken = async (userId) => {
         await user.save({ validateBeforeSave: false })
 
         return { accessToken, refreshToken }
-
     } catch (error) {
-        return resizeBy.status(500).json({
-            message: "somthing went erong while generating tokens"
-        })
+        console.log(error);
     }
+
 }
+
