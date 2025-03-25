@@ -21,7 +21,7 @@ function Room() {
             serverSecret,
             roomId,
             Date.now().toString(),
-            `${user.name}`
+            `${user?.name || "dummy"}`
         );
 
         const zp = ZegoUIKitPrebuilt.create(kitToken);
