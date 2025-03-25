@@ -1,4 +1,33 @@
 import { User } from "../models/user.model.js"
+
+export const registerUser = async (req, res) => {
+
+    const { name, email, password } = req.body
+
+
+    const existedUser = await User.findOne({ email })
+
+    if (existedUser) {
+        return res.status(409).json({
+            message: "user with username and email already exists"
+        })
+    }
+
+    //user details ko db mein store karo
+    const user = await User.create({
+        name,
+        email,
+        password,
+    })
+
+    //return response
+    return res.status(201).json({
+        message: "user register seccessfully",
+        user
+    })
+
+}
+
 export const googleAuthSuccess = async (req, res) => {
 
     if (!req.user) {
@@ -16,7 +45,7 @@ export const googleAuthSuccess = async (req, res) => {
     });
 
 
-    res.redirect("http://localhost:5173/select-interview")
+    res.redirect("http://localhost:5173/")
 
 };
 
