@@ -16,7 +16,7 @@ const Login = () => {
         const response = await login(data)
         console.log(response);
         setUser(response?.user)
-        navigate('/')
+        navigate('/select-interview')
 
     }
 
@@ -38,9 +38,9 @@ const Login = () => {
                         type="password" placeholder="Password" className="w-full p-3 mb-3 border rounded-md bg-gray-700 border-gray-600 text-white" />
                     {errors.password && <p className="text-red-400 text-sm">{errors.password.message}</p>}
 
-                    <button type="submit" className="w-full bg-blue-600 p-3 rounded-md hover:bg-blue-700 mt-3">Login</button>
+                    <button type="submit" className="w-full bg-blue-600 p-3 rounded-md hover:bg-blue-700 mt-3 cursor-pointer">Login</button>
                 </form>
-                <button className="w-full flex items-center justify-center mt-3 border p-3 rounded-md bg-gray-700 hover:bg-gray-600" onClick={handleLogin}>
+                <button className="w-full flex items-center justify-center mt-3 border p-3 rounded-md bg-gray-700 hover:bg-gray-600 cursor-pointer" onClick={handleLogin}>
                     <FcGoogle className="mr-2" /> Login with Google
                 </button>
                 <p className="text-sm text-center mt-3">Don't have an account? <Link to="/signup" className="text-blue-400">Sign Up</Link></p>

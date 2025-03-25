@@ -47,9 +47,9 @@ const Signup = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-md transition mt-3">Sign Up</button>
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-md transition mt-3 cursor-pointer">Sign Up</button>
                 </form>
-                <button className="w-full flex items-center justify-center mt-3 border border-gray-700 p-3 rounded-md bg-gray-700 hover:bg-gray-600 transition" onClick={handleLogin}>
+                <button className="w-full flex items-center justify-center mt-3 border border-gray-700 p-3 rounded-md bg-gray-700 hover:bg-gray-600 transition cursor-pointer" onClick={handleLogin}>
                     <FcGoogle className="mr-2" /> Sign up with Google
                 </button>
                 <p className="text-sm text-center mt-3">Already have an account? <Link to="/login" className="text-blue-400">Login</Link></p>
