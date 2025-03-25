@@ -25,7 +25,7 @@ const InterviewSelectionPage = () => {
             setIsMatching(false);
             Modal.destroyAll();
             console.log(`Matched with ${matchedWith.name}! Redirecting...`);
-            //navigate(`/interview-room/${roomId}`);
+            navigate(`/interview-room/${roomId}`);
         });
         socket.on("no-match-found", () => {
             console.log("No Match Found, closing modal...");
