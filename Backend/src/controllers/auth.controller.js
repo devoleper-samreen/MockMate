@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js"
+import { generateAccessAndRefreshToken } from "../helper/authToken.js"
 
 export const registerUser = async (req, res) => {
 
@@ -9,7 +10,7 @@ export const registerUser = async (req, res) => {
 
     if (existedUser) {
         return res.status(409).json({
-            message: "user with username and email already exists"
+            message: "user with email already exists"
         })
     }
 
@@ -27,6 +28,53 @@ export const registerUser = async (req, res) => {
     })
 
 }
+
+export const loginUser = async (req, res) => {
+
+    const { email, password } = req.body
+
+
+    const user = await User.findOne({ email })
+
+    //agar user nahi hain to error
+    if (!user) {
+        return res.status(404).json({
+            message: "user does not exists"
+        })
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const isPasswordValid = await bcrypt.compare(password, hashedPassword)
+
+
+    if (!isPasswordValid) {
+        return res.status(401).json({
+            message: "password is wrong"
+        })
+    }
+
+    //access or refresh token
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+
+    //optional step
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+
+    //send cookie
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res.status(200).
+        cookie("accessToken", accessToken, options).
+        cookie("refeshToken", refreshToken, options).
+        json({
+            user: loggedInUser,
+            accessToken,
+            refreshToken
+        })
+}
+
 
 export const googleAuthSuccess = async (req, res) => {
 
@@ -81,4 +129,5 @@ export const getMe = async (req, res) => {
         });
     }
 }
+
 
