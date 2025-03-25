@@ -73,8 +73,8 @@ const InterviewSelectionPage = () => {
             <h1 className="text-5xl font-bold text-yellow-400 my-12">Start Your Interview</h1>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full">
                 <SelectionCard icon={<FaUserTie />} title="Become an Interviewer" description="Host an interview and help others prepare." onClick={() => navigate("/become-interviewer")} />
-                <SelectionCard icon={<FaCalendarAlt />} title="Schedule an Interview" description="Plan your interview for later." onClick={() => navigate("/schedule-interview")} />
-                <SelectionCard icon={<FaRocket />} title="Instant Interview" description="Start an interview now."
+                <SelectionCard icon={<FaCalendarAlt />} title="Schedule an Interview" description="Plan your interview with interviewer." onClick={() => navigate("/schedule-interview")} />
+                <SelectionCard icon={<FaRocket />} title="Instant Interview" description="Start an interview now. we can can connect you with peer and interviewer."
                     onClick={handleInstantInterview}
                 />
             </div>
