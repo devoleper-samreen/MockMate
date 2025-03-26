@@ -39,10 +39,11 @@ const io = new Server(server, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"],
+        credentials: true
     },
 });
 
-//makeConnection(server);
+
 // Call Matching & Interview Logic
 makeConnection(io);
 

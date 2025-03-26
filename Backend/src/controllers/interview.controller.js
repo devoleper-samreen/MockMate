@@ -4,10 +4,9 @@ import { addUserToQueue, findMatch, connectUsers, removeUserFromQueue } from "..
 export const makeConnection = async (io) => {
 
     io.on("connection", (socket) => {
-        console.log(`User connected: ${socket.id}`);
+        console.log(`User connected with socket id: ${socket.id}`);
 
         socket.on('instant-interview', async ({ userId }) => {
-            console.log("instant trigger...");
 
             await User.findByIdAndUpdate(userId, { socketId: socket.id })
             addUserToQueue(userId)
@@ -15,26 +14,25 @@ export const makeConnection = async (io) => {
             findMatch(userId, io, (matchedUser) => {
                 if (matchedUser) {
                     connectUsers(userId, matchedUser, io)
-
-                    setTimeout(() => {
-                        removeUserFromQueue(userId);
-                        removeUserFromQueue(matchedUser._id);
-                    }, 3000)
                 }
+            });
+
+            socket.on("joined-room", ({ roomId }) => {
+                console.log(`✅ User confirmed joining: ${roomId}`);
             });
 
         })
 
-        socket.on('disconnect', async () => {
+        socket.on('disconnect', async (reason) => {
             console.log(`User disconnected: ${socket.id}`)
+            console.log("disconnect reason : ", reason);
 
-            const user = await User.findOneAndUpdate(
-                { socketId: socket.id },
-                { $unset: { socketId: 1 } }
-            )
+
+            const user = await User.findOne({ socketId: socket.id });
 
             if (user) {
                 removeUserFromQueue(user._id);
+                console.log(`Preventing user ${user._id} from being matched again.`);
             }
         })
 

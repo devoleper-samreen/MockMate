@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Editor from "@monaco-editor/react"
-import socket from "../apiManager/socket"
 import { useParams } from "react-router-dom"
+import useSocketStore from "../store/socket.store"
 
 
 function CodeEditor() {
+    const { socket, connect } = useSocketStore()
     const { roomId } = useParams()
     const [code, setCode] = useState("// Start coding...")
 
@@ -23,10 +24,6 @@ function CodeEditor() {
 
             setCode(newCode);
         });
-
-        return () => {
-            socket.disconnect();
-        };
 
     }, [])
 

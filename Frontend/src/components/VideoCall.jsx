@@ -25,30 +25,31 @@ function VideoCall() {
         );
 
         const zp = ZegoUIKitPrebuilt.create(kitToken);
+
         zp.joinRoom({
             videoQuality: 1,
             container: videoContainerRef.current,
             scenario: { mode: ZegoUIKitPrebuilt.VideoConference },
             onLeaveRoom: () => {
-                window.location.reload();
+                window.location.reload('/')
             },
 
             // Extra Features:
-            turnOnMicrophoneWhenJoining: true,
+            turnOnMicrophoneWhenJoining: false,
             turnOnCameraWhenJoining: true,
             showMyCameraToggleButton: true,
             showMyMicrophoneToggleButton: true,
             showScreenSharingButton: true,
             showTextChat: true,
             showUserList: false,
-            maxUsers: 2,
+            maxUsers: 5,
             layout: "Auto",
             showLayoutButton: false,
             showPreJoinView: false,
 
         });
 
-    }, [roomId, user.name]);
+    }, []);
 
     return (
         <div ref={videoContainerRef} style={{ width: "40%", height: "100vh" }} />

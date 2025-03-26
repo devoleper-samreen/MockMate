@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUserTie, FaCalendarAlt, FaRocket } from "react-icons/fa";
 import useUserStore from "../store/user.store";
-import socket from "../apiManager/socket";
 import { Modal, Spin } from "antd";
+import useSocketStore from "../store/socket.store";
 
 const InterviewSelectionPage = () => {
+    const { socket, connect } = useSocketStore();
     const navigate = useNavigate();
     const { user } = useUserStore();
     const [socketConnected, setSocketConnected] = useState(false);
@@ -13,26 +14,69 @@ const InterviewSelectionPage = () => {
     const [matchFailed, setMatchFailed] = useState(false);
     const [timer, setTimer] = useState(0);
 
+    useEffect(() => {
+        if (!socket.connected) {
+            connect();
+        }
+    }, []);
+
+    // const handleSocketEvents = useCallback(() => {
+    //     socket.on("connect", () => {
+    //         console.log("✅ Socket Connected:", socket.id);
+    //         setSocketConnected(true);
+    //     });
+
+    //     socket.on("disconnect", () => {
+    //         console.log("❌ Socket Disconnected!");
+    //         setSocketConnected(false);
+    //         setTimeout(() => socket.connect(), 2000);
+    //     });
+
+    //     socket.on("match-found", ({ roomId, matchedWith }) => {
+    //         setIsMatching(false);
+    //         Modal.destroyAll();
+    //         console.log(`Matched with ${matchedWith.name}! Redirecting...`);
+    //         navigate(`/interview-room/${roomId}`);
+    //     });
+
+    //     socket.on("join-room", ({ roomId }) => {
+    //         console.log(`📢 Joined Room: ${roomId}`);
+    //         socket.emit("joined-room", { roomId });
+    //     });
+
+    //     socket.on("no-match-found", () => {
+    //         console.log("❌ No Match Found");
+    //         setIsMatching(false);
+    //         setMatchFailed(true);
+    //     });
+    // }, []);
 
     useEffect(() => {
         socket.on("connect", () => {
             console.log("✅ Socket Connected:", socket.id);
             setSocketConnected(true);
         });
+
         socket.on("disconnect", () => {
             console.log("❌ Socket Disconnected!");
-            setTimeout(() => socket.connect(), 2000);
             setSocketConnected(false);
+            setTimeout(() => socket.connect(), 2000);
         });
+
         socket.on("match-found", ({ roomId, matchedWith }) => {
             setIsMatching(false);
             Modal.destroyAll();
             console.log(`Matched with ${matchedWith.name}! Redirecting...`);
-            console.log("🔄 Socket Connected?", socket.connected);
             navigate(`/interview-room/${roomId}`);
         });
+
+        socket.on("join-room", ({ roomId }) => {
+            console.log(`📢 Joined Room: ${roomId}`);
+            socket.emit("joined-room", { roomId });
+        });
+
         socket.on("no-match-found", () => {
-            console.log("No Match Found, closing modal...");
+            console.log("❌ No Match Found");
             setIsMatching(false);
             setMatchFailed(true);
         });
@@ -40,6 +84,7 @@ const InterviewSelectionPage = () => {
             socket.off("connect");
             socket.off("disconnect");
             socket.off("match-found");
+            socket.off("join-room");
             socket.off("no-match-found");
         };
     }, []);
@@ -47,17 +92,15 @@ const InterviewSelectionPage = () => {
     const handleInstantInterview = () => {
         setIsMatching(true);
         setMatchFailed(false);
-        setTimer(0);
+        setTimer(30);
         socket.emit("instant-interview", { userId: user._id });
-
     };
 
     useEffect(() => {
         let interval;
         if (isMatching) {
-            setTimer(30); // Start from 30
             interval = setInterval(() => {
-                setTimer(prev => {
+                setTimer((prev) => {
                     if (prev <= 1) {
                         clearInterval(interval);
                         return 0;
@@ -71,16 +114,13 @@ const InterviewSelectionPage = () => {
         return () => clearInterval(interval);
     }, [isMatching]);
 
-
     return (
         <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-10">
             <h1 className="text-5xl font-bold text-yellow-400 my-12">Start Your Interview</h1>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full">
                 <SelectionCard icon={<FaUserTie />} title="Become an Interviewer" description="Host an interview and help others prepare." onClick={() => navigate("/become-interviewer")} />
-                <SelectionCard icon={<FaCalendarAlt />} title="Schedule an Interview" description="Plan your interview with interviewer." onClick={() => navigate("/schedule-interview")} />
-                <SelectionCard icon={<FaRocket />} title="Instant Interview" description="Start an interview now. we can can connect you with peer and interviewer."
-                    onClick={handleInstantInterview}
-                />
+                <SelectionCard icon={<FaCalendarAlt />} title="Schedule an Interview" description="Plan your interview with an interviewer." onClick={() => navigate("/schedule-interview")} />
+                <SelectionCard icon={<FaRocket />} title="Instant Interview" description="Start an interview now. We can connect you with a peer or interviewer." onClick={handleInstantInterview} />
             </div>
 
             <Modal open={isMatching} footer={null} onCancel={() => setIsMatching(false)} centered>
@@ -111,4 +151,3 @@ const SelectionCard = ({ icon, title, description, onClick }) => (
 );
 
 export default InterviewSelectionPage;
-

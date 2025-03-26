@@ -25,14 +25,14 @@ export const findMatch = async (userId, io, callback) => {
 
         checkingCount++
 
-        const userIndex = waitingUsers.findIndex(user => user._id.toString() === userId);
+        const userIndex = waitingUsers.findIndex(user => user._id.toString() === userId.toString());
         if (userIndex === -1) {
             console.log(`User ${userId} not in queue, stopping match attempt.`);
             clearInterval(checkingTimer);
             return;
         }
 
-        const matchedUser = waitingUsers.find((user) => user._id.toString() !== userId)
+        const matchedUser = waitingUsers.find((user) => user._id.toString() !== userId.toString())
 
         if (matchedUser) {
             clearInterval(checkingTimer);
@@ -84,6 +84,9 @@ export const connectUsers = async (userId, matchedUser, io) => {
 
 export const removeUserFromQueue = (userId) => {
     if (!userId) return;
-    waitingUsers = waitingUsers.filter(user => user.userId !== userId);
+    waitingUsers = waitingUsers.filter(user => user._id.toString() !== userId.toString());
+
     console.log(`User with userId ${userId} removed from queue`);
+    console.log("waiting user list :", waitingUsers);
 };
+
