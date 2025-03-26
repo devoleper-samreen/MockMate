@@ -8,8 +8,10 @@ import { connectDB } from "./DB/db.js"
 import http from "http"
 import { makeConnection } from "./controllers/interview.controller.js"
 import cookieParser from "cookie-parser";
+import { Server } from "socket.io"
 
 dotenv.config();
+
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
@@ -33,6 +35,38 @@ connectDB()
 
 const server = http.createServer(app);
 
-makeConnection(server);
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+    },
+});
+
+//makeConnection(server);
+// Call Matching & Interview Logic
+makeConnection(io);
+
+
+
+let codeData = {};
+
+io.on("connection", (socket) => {
+    socket.on("join:room", (room) => {
+        console.log("got room id for editor:", room);
+
+        socket.join(room);
+        if (codeData[room]) {
+            socket.emit("code:update", codeData[room]);
+        }
+    });
+
+    socket.on("code:change", ({ room, code }) => {
+        console.log("trigger code change event", code);
+
+        codeData[room] = code;
+        socket.to(room).emit("code:update", code);
+    });
+});
+
 
 server.listen(port, () => console.log(`Server started on http://localhost:${port}`));

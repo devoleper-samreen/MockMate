@@ -16,12 +16,13 @@ export const addUserToQueue = async (userId) => {
 
 export const findMatch = async (userId, io, callback) => {
     const user = await User.findById(userId);
-    // if (!user || !matchedUser) return;
 
     let checkingCount = 0
     let maxChecking = 6
 
     const checkingTimer = setInterval(async () => {
+        console.log("trying to match with peer time :", checkingCount + 1);
+
         checkingCount++
 
         const userIndex = waitingUsers.findIndex(user => user._id.toString() === userId);
@@ -40,8 +41,8 @@ export const findMatch = async (userId, io, callback) => {
             console.log(`✅ Match found! ${userId} and ${matchedUser._id}`);
 
             // Remove both users using their socketId
-            removeUserFromQueue(user.socketId);
-            removeUserFromQueue(matchedUser.socketId);
+            removeUserFromQueue(user._id);
+            removeUserFromQueue(matchedUser._id);
 
             callback(matchedUser)
             return
@@ -51,7 +52,7 @@ export const findMatch = async (userId, io, callback) => {
             clearInterval(checkingTimer);
             retryTimers.delete(userId);
             console.log("No match found...");
-            removeUserFromQueue(user.socketId);
+            removeUserFromQueue(user._id);
 
             // Notify user
             io.to(user.socketId).emit("no-match-found");
@@ -73,11 +74,6 @@ export const connectUsers = async (userId, matchedUser, io) => {
     io.to(user.socketId).emit("match-found", { roomId, matchedWith: matchedUser });
     io.to(matchedUser.socketId).emit("match-found", { roomId, matchedWith: user });
 
-    //join room
-    // io.sockets.sockets.get(user.socketId)?.join(roomId);
-    // io.sockets.sockets.get(matchedUser.socketId)?.join(roomId);
-
-    // io.to(roomId).emit("user-joined", { userId, roomId });
 
     io.to(user.socketId).emit("join-room", { roomId });
     io.to(matchedUser.socketId).emit("join-room", { roomId });
@@ -86,8 +82,8 @@ export const connectUsers = async (userId, matchedUser, io) => {
 
 }
 
-export const removeUserFromQueue = (socketId) => {
-    if (!socketId) return;
-    waitingUsers = waitingUsers.filter(user => user.socketId !== socketId);
-    console.log(`User with socketId ${socketId} removed from queue`);
+export const removeUserFromQueue = (userId) => {
+    if (!userId) return;
+    waitingUsers = waitingUsers.filter(user => user.userId !== userId);
+    console.log(`User with userId ${userId} removed from queue`);
 };

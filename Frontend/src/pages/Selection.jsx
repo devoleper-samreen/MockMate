@@ -16,15 +16,19 @@ const InterviewSelectionPage = () => {
 
     useEffect(() => {
         socket.on("connect", () => {
+            console.log("✅ Socket Connected:", socket.id);
             setSocketConnected(true);
         });
         socket.on("disconnect", () => {
+            console.log("❌ Socket Disconnected!");
+            setTimeout(() => socket.connect(), 2000);
             setSocketConnected(false);
         });
         socket.on("match-found", ({ roomId, matchedWith }) => {
             setIsMatching(false);
             Modal.destroyAll();
             console.log(`Matched with ${matchedWith.name}! Redirecting...`);
+            console.log("🔄 Socket Connected?", socket.connected);
             navigate(`/interview-room/${roomId}`);
         });
         socket.on("no-match-found", () => {

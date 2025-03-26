@@ -1,9 +1,7 @@
-import { Server } from "socket.io"
 import { User } from "../models/user.model.js"
 import { addUserToQueue, findMatch, connectUsers, removeUserFromQueue } from "../helper/matchManager.js"
 
-export const makeConnection = async (server) => {
-    const io = new Server(server, { cors: { origin: '*' } })
+export const makeConnection = async (io) => {
 
     io.on("connection", (socket) => {
         console.log(`User connected: ${socket.id}`);
@@ -17,8 +15,11 @@ export const makeConnection = async (server) => {
             findMatch(userId, io, (matchedUser) => {
                 if (matchedUser) {
                     connectUsers(userId, matchedUser, io)
-                    removeUserFromQueue(userId);
-                    removeUserFromQueue(matchedUser._id);
+
+                    setTimeout(() => {
+                        removeUserFromQueue(userId);
+                        removeUserFromQueue(matchedUser._id);
+                    }, 3000)
                 }
             });
 
@@ -26,11 +27,15 @@ export const makeConnection = async (server) => {
 
         socket.on('disconnect', async () => {
             console.log(`User disconnected: ${socket.id}`)
-            // removeUserFromQueue(socket.id)
-            await User.findOneAndUpdate(
+
+            const user = await User.findOneAndUpdate(
                 { socketId: socket.id },
                 { $unset: { socketId: 1 } }
             )
+
+            if (user) {
+                removeUserFromQueue(user._id);
+            }
         })
 
     })
