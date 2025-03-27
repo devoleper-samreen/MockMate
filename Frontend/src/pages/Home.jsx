@@ -34,13 +34,22 @@ const HomePage = () => {
             <nav className="px-[2%] md:px-[5%] w-full flex justify-between items-center py-5 bg-gray-900 shadow-lg">
                 <h1 className="text-2xl font-bold text-yellow-400">MockMate</h1>
 
-                <button
-                    onClick={() => navigate("/signup")}
-                    className="bg-yellow-400 hover:bg-yellow-500 text-gray-700 font-semibold px-6 py-3 rounded shadow-md transition transform cursor-pointer"
-                >
-                    <span className="hidden sm:inline">Signup</span>
+                {
+                    !user && <button
+                        onClick={() => navigate("/signup")}
+                        className="bg-yellow-400 hover:bg-yellow-500 text-gray-700 font-semibold px-6 py-3 rounded shadow-md transition transform cursor-pointer"
+                    >
+                        Signup
+                    </button>
+                }
 
-                </button>
+                {
+                    user && <p
+                        className="bg-yellow-400 hover:bg-yellow-500 text-gray-700 font-bold rounded-full shadow-md transition transform cursor-pointer h-12 w-12 flex items-center justify-center text-2xl"
+                    >
+                        {user.name.charAt(0)}
+                    </p>
+                }
             </nav>
 
             <div className="w-full md:min-h-screen bg-gray-900 text-white">
