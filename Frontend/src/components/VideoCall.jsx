@@ -52,7 +52,7 @@ function VideoCall() {
     }, []);
 
     return (
-        <div ref={videoContainerRef} style={{ width: "40%", height: "100vh" }} />
+        <div ref={videoContainerRef} className="w-[40%] h-[100vh]" />
 
     );
 }

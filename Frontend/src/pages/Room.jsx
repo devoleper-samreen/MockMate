@@ -4,7 +4,7 @@ import CodeEditor from "../components/Editor"
 
 function Room() {
     return (
-        <div style={{ display: "flex", width: "100vw", height: "100vh", gap: "120px" }}>
+        <div className='flex w-[100vw] h-[100vh] gap-[120px]'>
             <VideoCall />
             <CodeEditor />
         </div>

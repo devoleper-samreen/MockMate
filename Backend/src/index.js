@@ -62,7 +62,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on("code:change", ({ room, code }) => {
-        console.log("trigger code change event", code);
 
         codeData[room] = code;
         socket.to(room).emit("code:update", code);

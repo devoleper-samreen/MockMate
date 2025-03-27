@@ -5,13 +5,11 @@ import useSocketStore from "../store/socket.store"
 
 
 function CodeEditor() {
-    const { socket, connect } = useSocketStore()
+    const { socket } = useSocketStore()
     const { roomId } = useParams()
-    const [code, setCode] = useState("// Start coding...")
+    const [code, setCode] = useState("// Start coding with javascript...")
 
     const handleCodeChange = (newValue) => {
-        console.log("handlecode change:", newValue);
-
         setCode(newValue);
         socket.emit("code:change", { room: roomId, code: newValue });
     };
@@ -20,19 +18,13 @@ function CodeEditor() {
 
         socket.emit("join:room", roomId);
         socket.on("code:update", (newCode) => {
-            console.log("got new code from sever:", newCode);
-
             setCode(newCode);
         });
 
     }, [])
 
     return (
-        <div style={{
-            width: "50vw",
-            height: "100vh",
-            float: "right"
-        }}>
+        <div className='w-[50vw] h-[100vh]'>
             <Editor
                 height="100vh"
                 width="100%"
