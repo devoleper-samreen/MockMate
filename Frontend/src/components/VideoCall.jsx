@@ -41,7 +41,7 @@ function VideoCall() {
             showMyMicrophoneToggleButton: true,
             showScreenSharingButton: true,
             showTextChat: true,
-            showUserList: false,
+            showUserList: true,
             maxUsers: 5,
             layout: "Auto",
             showLayoutButton: false,
@@ -52,7 +52,7 @@ function VideoCall() {
     }, []);
 
     return (
-        <div ref={videoContainerRef} className="w-[40%] h-[100vh]" />
+        <div ref={videoContainerRef} className="w-full h-screen" />
 
     );
 }

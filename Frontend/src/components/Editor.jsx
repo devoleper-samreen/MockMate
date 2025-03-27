@@ -24,10 +24,8 @@ function CodeEditor() {
     }, [])
 
     return (
-        <div className='w-[50vw] h-[100vh]'>
+        <div className='w-full h-screen'>
             <Editor
-                height="100vh"
-                width="100%"
                 theme="vs-dark"
                 language="javascript"
                 value={code}
@@ -35,6 +33,11 @@ function CodeEditor() {
                 options={{
                     fontSize: 20,
                     minimap: { enabled: false },
+                    wordWrap: "on",
+                    autoIndent: "full",
+                    matchBrackets: "always",
+                    tabSize: 2,
+                    insertSpaces: 'true'
                 }}
             />
         </div>
