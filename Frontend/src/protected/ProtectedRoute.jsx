@@ -1,7 +1,5 @@
-import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import useAuthStore from "../store/user.store";
-
 
 function ProtectedRoute() {
     const { user } = useAuthStore();
