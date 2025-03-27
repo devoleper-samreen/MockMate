@@ -115,7 +115,7 @@ const InterviewSelectionPage = () => {
     }, [isMatching]);
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-10">
+        <div className="min-h-[90vh] bg-gray-900 text-white flex flex-col items-center px-10">
             <h1 className="text-5xl font-bold text-yellow-400 my-12">Start Your Interview</h1>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full">
                 <SelectionCard icon={<FaUserTie />} title="Become an Interviewer" description="Host an interview and help others prepare." onClick={() => navigate("/become-interviewer")} />

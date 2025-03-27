@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/user.store"
 import { Dropdown, Menu } from "antd"
 
-
 function Navbar() {
     const navigate = useNavigate()
     const { user } = useAuthStore()
@@ -24,7 +23,7 @@ function Navbar() {
 
     return (
         <nav className="px-[2%] md:px-[5%] w-full flex justify-between items-center py-5 bg-gray-900 shadow-lg">
-            <h1 className="text-2xl font-bold text-yellow-400">MockMate</h1>
+            <h1 className="text-2xl font-bold text-yellow-400 cursor-pointer" onClick={() => navigate('/')}>MockMate</h1>
             {
                 !user && <button
                     onClick={() => navigate("/signup")}
