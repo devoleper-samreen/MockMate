@@ -20,37 +20,6 @@ const InterviewSelectionPage = () => {
         }
     }, []);
 
-    // const handleSocketEvents = useCallback(() => {
-    //     socket.on("connect", () => {
-    //         console.log("✅ Socket Connected:", socket.id);
-    //         setSocketConnected(true);
-    //     });
-
-    //     socket.on("disconnect", () => {
-    //         console.log("❌ Socket Disconnected!");
-    //         setSocketConnected(false);
-    //         setTimeout(() => socket.connect(), 2000);
-    //     });
-
-    //     socket.on("match-found", ({ roomId, matchedWith }) => {
-    //         setIsMatching(false);
-    //         Modal.destroyAll();
-    //         console.log(`Matched with ${matchedWith.name}! Redirecting...`);
-    //         navigate(`/interview-room/${roomId}`);
-    //     });
-
-    //     socket.on("join-room", ({ roomId }) => {
-    //         console.log(`📢 Joined Room: ${roomId}`);
-    //         socket.emit("joined-room", { roomId });
-    //     });
-
-    //     socket.on("no-match-found", () => {
-    //         console.log("❌ No Match Found");
-    //         setIsMatching(false);
-    //         setMatchFailed(true);
-    //     });
-    // }, []);
-
     useEffect(() => {
         socket.on("connect", () => {
             console.log("✅ Socket Connected:", socket.id);

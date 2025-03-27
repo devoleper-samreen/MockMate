@@ -10,7 +10,7 @@ import useSocketStore from "./store/socket.store";
 import Profile from "./components/Profile"
 
 const App = () => {
-  const { socket, connect } = useSocketStore();
+  const { socket } = useSocketStore();
 
   useEffect(() => {
     socket.connect();
