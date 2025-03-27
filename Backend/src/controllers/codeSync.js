@@ -1,24 +1,18 @@
-// import { Server } from "socket.io"
+let codeData = {};
 
-// const io = new Server(server, {
-//     cors: {
-//         origin: "*",
-//         methods: ["GET", "POST"],
-//     },
-// });
+export const handleCodeSync = (io) => {
+    io.on("connection", (socket) => {
+        socket.on("join:room", (room) => {
+            console.log("got room id for editor:", room);
+            socket.join(room);
+            if (codeData[room]) {
+                socket.emit("code:update", codeData[room]);
+            }
+        });
 
-// let codeData = {};
-
-// io.on("connection", (socket) => {
-//     socket.on("joinRoom", (room) => {
-//         socket.join(room);
-//         if (codeData[room]) {
-//             socket.emit("codeUpdate", codeData[room]);
-//         }
-//     });
-
-//     socket.on("codeChange", ({ room, code }) => {
-//         codeData[room] = code;
-//         socket.to(room).emit("codeUpdate", code);
-//     });
-// });
+        socket.on("code:change", ({ room, code }) => {
+            codeData[room] = code;
+            socket.to(room).emit("code:update", code);
+        });
+    });
+};

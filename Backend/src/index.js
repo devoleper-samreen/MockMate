@@ -9,6 +9,7 @@ import http from "http"
 import { makeConnection } from "./controllers/interview.controller.js"
 import cookieParser from "cookie-parser";
 import { Server } from "socket.io"
+import { handleCodeSync } from "./controllers/codeSync.js"
 
 dotenv.config();
 
@@ -47,26 +48,7 @@ const io = new Server(server, {
 // Call Matching & Interview Logic
 makeConnection(io);
 
-
-
-let codeData = {};
-
-io.on("connection", (socket) => {
-    socket.on("join:room", (room) => {
-        console.log("got room id for editor:", room);
-
-        socket.join(room);
-        if (codeData[room]) {
-            socket.emit("code:update", codeData[room]);
-        }
-    });
-
-    socket.on("code:change", ({ room, code }) => {
-
-        codeData[room] = code;
-        socket.to(room).emit("code:update", code);
-    });
-});
-
+// Code Sync Logic
+handleCodeSync(io);
 
 server.listen(port, () => console.log(`Server started on http://localhost:${port}`));

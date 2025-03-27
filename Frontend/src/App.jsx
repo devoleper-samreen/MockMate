@@ -23,9 +23,6 @@ const App = () => {
       setTimeout(() => socket.connect(), 3000);
     });
 
-    // return () => {
-    //   socket.disconnect();
-    // };
   }, []);
 
 
