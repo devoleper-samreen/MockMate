@@ -7,6 +7,7 @@ import Room from "./pages/Room"
 import Signup from "./components/Signup"
 import Login from "./components/Login"
 import useSocketStore from "./store/socket.store";
+import Profile from "./components/Profile"
 
 const App = () => {
   const { socket, connect } = useSocketStore();
@@ -35,6 +36,7 @@ const App = () => {
 
 
         <Route element={<ProtectedRoute />}>
+          <Route path="/profile" element={<Profile />} />
           <Route path="/select-interview" element={<InterviewSelectionPage />} />
           <Route path="/interview-room/:roomId" element={<Room />} />
         </Route>
