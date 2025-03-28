@@ -26,3 +26,7 @@ export const logout = async () => {
 export const getMe = async () => {
     return await AxiosInstance.get("/auth/get-me")
 }
+
+export const updateProfile = async (data) => {
+    return await AxiosInstance.put('/profile/update', data)
+}

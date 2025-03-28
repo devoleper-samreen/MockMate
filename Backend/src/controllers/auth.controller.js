@@ -133,4 +133,43 @@ export const getMe = async (req, res) => {
     }
 }
 
+export const updateProfile = async (req, res) => {
+    try {
+        const userId = req.user._id
+        const { name, email, role, profile } = req.body
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                name,
+                email,
+                role,
+                profile
+            },
+            { new: true }
+        )
+
+        if (!updatedUser) {
+            return res.status(400).json({
+                message: 'Profile not updated',
+            })
+        }
+
+        return res.status(200).json({
+            message: 'Profile updated successfully!',
+            updatedUser
+        })
+
+    } catch (error) {
+
+        console.error("Error while updating profile:", error);
+        return res.status(500).json({
+            message: "error while updating profile",
+            error: error.message
+        })
+
+    }
+
+}
+
 

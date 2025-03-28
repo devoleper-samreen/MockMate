@@ -3,7 +3,7 @@ import { Modal, Input, Form, Select, Upload, Button } from "antd";
 import { FaUserEdit, FaSignOutAlt } from "react-icons/fa";
 import { UploadOutlined } from "@ant-design/icons";
 import useAuthStore from "../store/user.store";
-import { logout } from "../apiManager/auth"
+import { logout, updateProfile } from "../apiManager/auth"
 import { useNavigate } from "react-router-dom"
 
 
@@ -38,6 +38,33 @@ const ProfilePage = () => {
         setUser(null)
         localStorage.removeItem("auth-storage")
         navigate('/')
+    }
+
+    const sabmitHandler = async () => {
+        try {
+            const values = await form.validateFields()
+
+            const updatedData = {
+                ...user,
+                name: values.name,
+                email: values.email,
+                role: values.role,
+                profile: {
+                    skills: values.skills.split(",").map((skill) => skill.trim()),
+                    experience: values.experience,
+                    resume: user.profile.resume,
+                },
+            }
+
+            const response = await updateProfile(updatedData)
+            console.log(response);
+            setUser(response.updatedUser)
+
+        } catch (error) {
+            console.error("Validation failed:", error)
+        } finally {
+            setIsModalOpen(false)
+        }
     }
 
     return (
@@ -91,6 +118,7 @@ const ProfilePage = () => {
             <Modal
                 title="Edit Profile"
                 open={isModalOpen}
+                onOk={sabmitHandler}
                 onCancel={() => setIsModalOpen(false)}
                 okText="Save"
                 cancelText="Cancel"
