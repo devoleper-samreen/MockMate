@@ -46,13 +46,13 @@ const ProfilePage = () => {
 
             const updatedData = {
                 ...user,
-                name: values.name,
-                email: values.email,
-                role: values.role,
+                name: values?.name,
+                email: values?.email,
+                role: values?.role,
                 profile: {
-                    skills: values.skills.split(",").map((skill) => skill.trim()),
-                    experience: values.experience,
-                    resume: user.profile.resume,
+                    skills: values.skills?.split(",").map((skill) => skill.trim()),
+                    experience: values?.experience,
+                    resume: values.profile?.resume,
                 },
             }
 
@@ -82,7 +82,13 @@ const ProfilePage = () => {
                 {/* User Info */}
                 <h2 className="text-2xl font-bold text-center mt-4">{user.name}</h2>
                 <p className="text-gray-400 text-center">{user.email}</p>
-                <p className="text-sm text-center mt-2">{user.profile.skills}</p>
+                <div className="flex items-center justify-center text-sm text-center my-6">
+                    {
+                        user.profile.skills.map((skill, i) => (
+                            <p key={i} className="px-4 py-3 border border-yellow-400 text-yellow-400 mx-2 rounded">{skill.trim() || "Your Skills"}</p>
+                        ))
+                    }
+                </div>
                 <p className="text-xl font-semibold text-center mt-2 text-yellow-400">{user.profile.experience}</p>
 
                 {/* Resume Link */}
@@ -146,7 +152,7 @@ const ProfilePage = () => {
                         <Upload
                             beforeUpload={(file) => {
                                 const fileURL = URL.createObjectURL(file);
-                                setUser({ ...user, profile: { ...user.profile, resume: fileURL } });
+                                // setUser({ ...user, profile: { ...user.profile, resume: fileURL } });
                                 return false; // Prevent auto-upload
                             }}
                             showUploadList={{ showPreviewIcon: false }}
