@@ -13,6 +13,7 @@ const ProfilePage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const [file, setFile] = useState(null);
+    const [isUpload, setIsUpload] = useState(false)
 
     const generateAvatarUrl = (name) => {
         const initials = name
@@ -49,6 +50,7 @@ const ProfilePage = () => {
 
     const sabmitHandler = async () => {
         try {
+            setIsUpload(true)
             const values = await form.validateFields()
 
             const updatedData = {
@@ -74,6 +76,7 @@ const ProfilePage = () => {
             console.error("Validation failed:", error)
         } finally {
             setIsModalOpen(false)
+            setIsUpload(false)
         }
     }
 
@@ -137,7 +140,7 @@ const ProfilePage = () => {
                 open={isModalOpen}
                 onOk={sabmitHandler}
                 onCancel={() => setIsModalOpen(false)}
-                okText="Save"
+                okText={isUpload ? 'Uploading...' : 'Save'}
                 cancelText="Cancel"
             >
                 <Form form={form} layout="vertical">
