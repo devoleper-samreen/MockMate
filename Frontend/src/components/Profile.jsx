@@ -12,17 +12,7 @@ const ProfilePage = () => {
     const { user, setUser } = useAuthStore()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
-
-    const handleEditClick = () => {
-        form.setFieldsValue({
-            name: user.name,
-            email: user.email,
-            skills: user.profile.skills,
-            experience: user.profile.experience,
-            role: user.role,
-        });
-        setIsModalOpen(true);
-    };
+    const [file, setFile] = useState(null);
 
     const generateAvatarUrl = (name) => {
         const initials = name
@@ -30,7 +20,7 @@ const ProfilePage = () => {
             .map((word) => word.charAt(0).toUpperCase())
             .join("");
         return `https://ui-avatars.com/api/?name=${initials}`;
-    };
+    }
 
     const handleLogout = async () => {
         const response = await logout()
@@ -39,6 +29,23 @@ const ProfilePage = () => {
         localStorage.removeItem("auth-storage")
         navigate('/')
     }
+
+    const handleEditClick = () => {
+        form.setFieldsValue({
+            name: user.name,
+            email: user.email,
+            skills: user.profile.skills,
+            experience: user.profile.experience,
+            role: user.role,
+            resume: user.profile.resume
+        });
+        setIsModalOpen(true);
+    };
+
+    const handleFileChange = ({ file }) => {
+        console.log("File selected:", file)
+        setFile(file);
+    };
 
     const sabmitHandler = async () => {
         try {
@@ -49,12 +56,15 @@ const ProfilePage = () => {
                 name: values?.name,
                 email: values?.email,
                 role: values?.role,
+                resume: file,
                 profile: {
-                    skills: values.skills?.split(",").map((skill) => skill.trim()),
-                    experience: values?.experience,
-                    resume: values.profile?.resume,
+                    skills: typeof values.skills === 'string' ? values.skills.split(",").map((skill) => skill.trim()) : user.profile.skills,
+                    experience: values?.experience || user.profile.experience,
                 },
-            }
+            };
+
+            console.log("updated data", updatedData);
+
 
             const response = await updateProfile(updatedData)
             console.log(response);
@@ -66,6 +76,7 @@ const ProfilePage = () => {
             setIsModalOpen(false)
         }
     }
+
 
     return (
         <div className="h-[90vh] bg-gray-900 text-white flex flex-col items-center justify-center">
@@ -148,17 +159,14 @@ const ProfilePage = () => {
                             <Select.Option value="interviewer">Interviewer</Select.Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item label="Resume">
+                    <Form.Item name={'resume'} label="Resume">
                         <Upload
-                            beforeUpload={(file) => {
-                                const fileURL = URL.createObjectURL(file);
-                                // setUser({ ...user, profile: { ...user.profile, resume: fileURL } });
-                                return false; // Prevent auto-upload
-                            }}
-                            showUploadList={{ showPreviewIcon: false }}
+                            beforeUpload={() => false}
+                            onChange={handleFileChange}
                         >
                             <Button icon={<UploadOutlined />}>Upload Resume</Button>
                         </Upload>
+
                         {user.profile.resume && (
                             <p className="text-green-500 mt-2">
                                 Resume Uploaded -{" "}

@@ -1,6 +1,8 @@
 import { User } from "../models/user.model.js"
 import { generateAccessAndRefreshToken } from "../helper/authToken.js"
 import bcrypt from "bcryptjs"
+import { uploadOnCloudinary } from "../helper/cloudinary.js"
+
 
 export const registerUser = async (req, res) => {
     console.log("req.body", req.body);
@@ -138,13 +140,25 @@ export const updateProfile = async (req, res) => {
         const userId = req.user._id
         const { name, email, role, profile } = req.body
 
+        const resumeLocalPath = req.file.path
+
+        const resume = await uploadOnCloudinary(resumeLocalPath)
+
+        if (!resume) {
+            return res.status(400).json({
+                message: "avatar file is required"
+            })
+        }
+
+
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             {
                 name,
                 email,
                 role,
-                profile
+                profile: { ...profile, resume: resume.url }
+
             },
             { new: true }
         )

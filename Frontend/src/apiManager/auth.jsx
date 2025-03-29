@@ -30,3 +30,4 @@ export const getMe = async () => {
 export const updateProfile = async (data) => {
     return await AxiosInstance.put('/profile/update', data)
 }
+
