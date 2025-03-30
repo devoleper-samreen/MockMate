@@ -162,7 +162,7 @@ const ProfilePage = () => {
                             <Select.Option value="interviewer">Interviewer</Select.Option>
                         </Select>
                     </Form.Item>
-                    <Form.Item name={'resume'} label="Resume">
+                    <Form.Item name={'resume'} label="Resume : (Upload only in Image format)">
                         <Upload
                             beforeUpload={() => false}
                             onChange={handleFileChange}
