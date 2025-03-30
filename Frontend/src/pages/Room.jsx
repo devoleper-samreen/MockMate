@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import VideoCall from "../components/VideoCall";
 import CodeEditor from "../components/Editor";
 
 function Room() {
+    // useEffect(() => {
+    //     return () => {
+    //         window.location.replace('/')
+    //     }
+    // })
+
     return (
         <PanelGroup direction="horizontal" className="w-full h-screen">
             {/* Video Call Panel */}

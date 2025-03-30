@@ -31,7 +31,8 @@ function VideoCall() {
             container: videoContainerRef.current,
             scenario: { mode: ZegoUIKitPrebuilt.VideoConference },
             onLeaveRoom: () => {
-                window.location.reload('/')
+                zp.destroy()
+                window.location.replace('/')
             },
 
             // Extra Features:
@@ -48,6 +49,10 @@ function VideoCall() {
             showPreJoinView: false,
 
         });
+
+        return () => {
+            zp.destroy()
+        }
 
     }, []);
 

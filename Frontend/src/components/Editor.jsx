@@ -21,6 +21,14 @@ function CodeEditor() {
             setCode(newCode);
         });
 
+        return () => {
+            socket.emit("leave:room", roomId)
+            setCode("// Start coding with javascript...")
+            socket.off("code:update")
+            socket.disconnect()
+            window.location.replace('/')
+        }
+
     }, [])
 
     return (

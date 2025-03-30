@@ -14,8 +14,6 @@ const HomePage = () => {
         try {
             if (!user) {
                 const response = await getMe()
-                //console.log(response.user);
-
                 setUser(response?.user);
             }
 

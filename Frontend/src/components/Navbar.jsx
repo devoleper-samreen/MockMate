@@ -26,10 +26,10 @@ function Navbar() {
             <h1 className="text-2xl font-bold text-yellow-400 cursor-pointer" onClick={() => navigate('/')}>MockMate</h1>
             {
                 !user && <button
-                    onClick={() => navigate("/signup")}
+                    onClick={() => navigate("/login")}
                     className="bg-yellow-400 hover:bg-yellow-500 text-gray-700 font-semibold px-6 py-3 rounded shadow-md transition transform cursor-pointer"
                 >
-                    Signup
+                    Login
                 </button>
             }
             {

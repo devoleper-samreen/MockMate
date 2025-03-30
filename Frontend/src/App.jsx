@@ -33,12 +33,12 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/interview-room/:roomId" element={<Room />} />
 
 
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/select-interview" element={<InterviewSelectionPage />} />
-          <Route path="/interview-room/:roomId" element={<Room />} />
         </Route>
       </Routes>
     </BrowserRouter>

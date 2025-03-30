@@ -36,12 +36,13 @@ const InterviewSelectionPage = () => {
             setIsMatching(false);
             Modal.destroyAll();
             console.log(`Matched with ${matchedWith.name}! Redirecting...`);
-            navigate(`/interview-room/${roomId}`);
+            // navigate(`/interview-room/${roomId}`);
         });
 
         socket.on("join-room", ({ roomId }) => {
             console.log(`📢 Joined Room: ${roomId}`);
             socket.emit("joined-room", { roomId });
+            navigate(`/interview-room/${roomId}`);
         });
 
         socket.on("no-match-found", () => {

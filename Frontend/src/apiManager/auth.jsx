@@ -7,20 +7,15 @@ export const authenticate = async () => {
 }
 
 export const signup = async (data) => {
-    console.log("apimanager data : ", data);
-
     return await AxiosInstance.post('/auth/signup', data)
-
 }
 
 export const login = async (data) => {
     return await AxiosInstance.post('/auth/login', data)
-
 }
 
 export const logout = async () => {
     return await AxiosInstance.get('/auth/logout')
-
 }
 
 export const getMe = async () => {
