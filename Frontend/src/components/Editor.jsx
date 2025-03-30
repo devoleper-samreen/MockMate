@@ -16,20 +16,18 @@ function CodeEditor() {
 
     useEffect(() => {
 
-        socket.emit("join:room", roomId);
+        socket.emit("join:room", roomId)
         socket.on("code:update", (newCode) => {
             setCode(newCode);
-        });
+        })
 
         return () => {
             socket.emit("leave:room", roomId)
             setCode("// Start coding with javascript...")
             socket.off("code:update")
-            socket.disconnect()
-            window.location.replace('/')
         }
 
-    }, [])
+    }, [roomId])
 
     return (
         <div className='w-full h-screen'>

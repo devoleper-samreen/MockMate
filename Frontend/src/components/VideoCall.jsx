@@ -1,41 +1,42 @@
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
-import { useParams, useNavigate } from "react-router-dom"
-import useAuthStore from "../store/user.store"
-import { useRef, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import useAuthStore from "../store/user.store";
+import { useRef, useEffect, useState } from "react";
 
 function VideoCall() {
     const navigate = useNavigate();
-    const appId = import.meta.env.VITE_APP_ID
-    const secret = import.meta.env.VITE_SERVER_SECRET
-
-    const { roomId } = useParams()
+    const { roomId } = useParams();
+    const { user } = useAuthStore();
     const videoContainerRef = useRef(null);
-    const { user } = useAuthStore()
+    const [zpInstance, setZpInstance] = useState(null);
 
     useEffect(() => {
-        const appID = Number(appId)
-        const serverSecret = String(secret)
+        const appID = Number(import.meta.env.VITE_APP_ID);
+        const serverSecret = String(import.meta.env.VITE_SERVER_SECRET);
+
+        if (!roomId || !appID || !serverSecret) {
+            console.error("Missing required room details or API credentials");
+            return;
+        }
 
         const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
             appID,
             serverSecret,
             roomId,
             Date.now().toString(),
-            `${user?.name || "dummy"}`
+            user?.name || "Guest"
         );
 
         const zp = ZegoUIKitPrebuilt.create(kitToken);
+        setZpInstance(zp);
 
         zp.joinRoom({
-            videoQuality: 1,
+            videoQuality: 2, // Balanced video quality
             container: videoContainerRef.current,
             scenario: { mode: ZegoUIKitPrebuilt.VideoConference },
             onLeaveRoom: () => {
-                zp.destroy()
-                window.location.replace('/')
+                handleLeaveCall();
             },
-
-            // Extra Features:
             turnOnMicrophoneWhenJoining: false,
             turnOnCameraWhenJoining: true,
             showMyCameraToggleButton: true,
@@ -47,19 +48,29 @@ function VideoCall() {
             layout: "Auto",
             showLayoutButton: false,
             showPreJoinView: false,
-
         });
 
         return () => {
-            zp.destroy()
-        }
+            zp.destroy();
+            setZpInstance(null);
+        };
+    }, [roomId, user?.name]);
 
-    }, []);
+    const handleLeaveCall = () => {
+        if (zpInstance) {
+            zpInstance.destroy();
+            setZpInstance(null);
+        }
+        navigate("/");
+    };
 
     return (
-        <div ref={videoContainerRef} className="w-full h-screen" />
-
+        <div className="w-full h-screen relative">
+            <div ref={videoContainerRef} className="w-full h-full" />
+        </div>
     );
 }
 
 export default VideoCall;
+
+
